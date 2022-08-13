@@ -5,9 +5,13 @@
 # Find All Users
 GET {{ baseURL }}/users
 
+
+
 ###
 # Find User By Id
-GET {{ baseURL }}/users/1
+GET {{ baseURL }}/users/62f5c49cfff656b3d4ad7d45
+
+
 
 ###
 # Create User
@@ -15,6 +19,7 @@ POST {{ baseURL }}/users
 Content-Type: application/json
 
 {
+    "name":"tom1",
     "email": "example@email.com",
     "password": "password"
 }
@@ -30,5 +35,25 @@ Content-Type: application/json
 }
 
 ###
+# Login
+POST {{ baseURL }}/login
+Content-Type: application/json
+
+{
+    "email": "example@email.com",
+    "password": "password"
+}
+
+
+###
+# Logout
+POST {{ baseURL }}/logout
+
+
+
+###
 # Delete User By Id
-DELETE {{ baseURL }}/users/1
+DELETE {{ baseURL }}/users/62f5c49cfff656b3d4ad7d45
+
+
+

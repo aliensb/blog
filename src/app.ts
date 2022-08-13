@@ -13,6 +13,7 @@ import { dbConnection } from '@databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { isEmpty } from './utils/util';
 
 class App {
   public app: express.Application;
@@ -49,8 +50,12 @@ class App {
       set('debug', true);
     }
 
-    connect(dbConnection.url, () => {
-      logger.info('db connected');
+    connect(dbConnection.url, error => {
+      if (!isEmpty(error)) {
+        logger.error(error);
+      } else {
+        logger.info('db connected');
+      }
     });
   }
 

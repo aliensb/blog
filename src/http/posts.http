@@ -1,0 +1,37 @@
+@baseURL = http://localhost:3000
+
+###
+# Login
+POST {{ baseURL }}/login
+Content-Type: application/json
+
+{
+    "email": "example@email.com",
+    "password": "password"
+}
+
+
+###
+# Create post
+POST {{ baseURL }}/posts
+Content-Type: application/json
+
+{
+    "title":"ggggg",
+    "content": "fffffffffff么？答案只有一个：世界上只有一个中国，台湾是中国不可分割的一部分，中华人民共和国是代表全中国的唯一合法政府。这是中国同各国交往的政治基础，也有史为据。从1943年《开罗宣言》到1945年《波茨坦公告》，都明确无误地表明，中国拥有对台湾的领土主权。1971年第26届联大通过的第2758号决议，是体现一个中国原则的重要政治文件，具有法律效力。针对佩洛西窜台一事，170多个国家和许多国际组织力挺中国立场、支持一个中国原则，充分说明关于台湾问题的历史经纬清晰、法理事实清楚。"
+}
+
+###
+# Edit post
+PUT {{ baseURL }}/posts
+Content-Type: application/json
+
+{
+    "postId":"62f9b6d3602cce91c3abff9e",
+    "title":"测试评论111",
+    "content": "汪汪队开大会111231312"
+}
+
+###
+#Get Post
+GET {{ baseURL }}/posts/62f9b6d3602cce91c3abff9e
