@@ -1,0 +1,14 @@
+@baseURL = http://localhost:3000
+
+# Create Comment
+POST {{ baseURL }}/posts/62f9c280011455739cbfc561/comments
+Content-Type: application/json
+
+{
+    "content": "四级评论2",
+    "commentId":"62f9c3bcadef36603eb18a13"
+}
+
+###
+# Get Comments
+GET  {{ baseURL }}/posts/62f9c280011455739cbfc561/comments
