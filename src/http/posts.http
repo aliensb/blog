@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "title":"88888",
-    "content": "孤寡孤寡"
+    "content": "中国人民大团结"
 }
 
 ###
@@ -38,9 +38,9 @@ POST {{ baseURL }}/posts/page
 Content-Type: application/json
 
 {
-    "pageNum":5,
+    "pageNum":1,
     "pageSize":2,
-    "keyword":"对象"
+    "keyword":"中国人民"
 }
 
 ###

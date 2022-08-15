@@ -1,7 +1,7 @@
-import { compare } from 'bcrypt';
+import { compare,hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
-import { UserLoginDto } from '@dtos/users.dto';
+import { UserLoginDto,CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
@@ -33,6 +33,18 @@ class AuthService {
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
 
     return findUser;
+  }
+
+  public async signup(userData: CreateUserDto): Promise<User> {
+    if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
+
+    const findUser: User = await this.users.findOne({ email: userData.email });
+    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
+
+    const hashedPassword = await hash(userData.password, 10);
+    const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
+
+    return createUserData;
   }
 
   public createToken(user: User): TokenData {

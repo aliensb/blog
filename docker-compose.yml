@@ -12,11 +12,13 @@ services:
     networks:
       - backend
   server:
-    build:
-      context: ./
-      target: development-build-stage
-      dockerfile: Dockerfile
+    image: typescript-express
     container_name: server
+    environment:
+      - DB_URL=mongodb://mongo:27017/blog
+      - REDIS_URL=redis://redis:6379
+      - ES_NODE=http://es:9200
+      - INDEX_NAME=post
     ports:
       - '3000:3000'
     volumes:
@@ -27,15 +29,42 @@ services:
       - backend
     links:
       - mongo
+      - es
+      - redis
     depends_on:
       - mongo
+      - es
+      - redis
   mongo:
-    image: mvertes/alpine-mongo
+    image: mongo
     container_name: mongo
     ports:
       - '27017:27017'
     networks:
       - backend
+  es:
+    build: ./es
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - '9200:9200'
+    networks:
+      - backend
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    networks:
+      - backend
+  logstash:
+    image: logstash-mongo
+    volumes:
+      - ./logstash/config:/usr/share/logstash/pipeline/
+      - ./logstash/data:/opt/data
+    networks:
+      - backend
+    links:
+      - es
 
 networks:
   backend:
