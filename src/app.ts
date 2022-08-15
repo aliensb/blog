@@ -50,7 +50,7 @@ class App {
       set('debug', true);
     }
 
-    connect(dbConnection.url, error => {
+    connect(dbConnection.dbUrl, error => {
       if (!isEmpty(error)) {
         logger.error(error);
       } else {

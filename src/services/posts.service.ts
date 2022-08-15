@@ -1,5 +1,6 @@
-import { CreatePostDto, UpdatePostDto } from '@/dtos/posts.dto';
-import { esConnection, INDEX_NAME } from '@/es';
+import { dbConnection } from '@/databases';
+import { Page } from '@/dtos/page.dot';
+import { CreatePostDto, PagePostDto, UpdatePostDto } from '@/dtos/posts.dto';
 import { HttpException } from '@/exceptions/HttpException';
 import { Post } from '@/interfaces/post.interface';
 import { postModel } from '@/models/posts.model';
@@ -9,17 +10,11 @@ import { Client } from '@elastic/elasticsearch';
 
 class PostService {
   private posts = postModel;
-  private esClient = new Client(esConnection);
+  private esClient = new Client({ node: dbConnection.esNode });
 
   public async createPost(postData: CreatePostDto, userId: string): Promise<string> {
     if (isEmpty(postData)) throw new HttpException(400, 'postData is empty');
     const createdPost = await this.posts.create({ ...postData, author: userId });
-    const { _id, ...document } = createdPost;
-    await this.esClient.index({
-      index: INDEX_NAME,
-      id: _id,
-      document: document,
-    });
     return createdPost._id;
   }
 
@@ -29,13 +24,44 @@ class PostService {
     post.title = postData.title;
     post.content = postData.content;
     post.save();
-    const { _id, ...document } = post;
-    await this.esClient.update({
-      index: INDEX_NAME,
-      id: _id,
-      doc: document,
-    });
+
     return post._id;
+  }
+
+  public async pagePost(page: PagePostDto): Promise<Page<Post>> {
+    if (page.keyword) {
+      const result = await this.esClient.search<Post>({
+        index: dbConnection.indexName,
+        query: {
+          bool: {
+            should: [
+              {
+                match_phrase: {
+                  title: page.keyword,
+                },
+              },
+              {
+                match_phrase: {
+                  content: page.keyword,
+                },
+              },
+            ],
+          },
+        },
+        from: (page.pageNum - 1) * page.pageSize,
+        size: page.pageSize,
+      });
+      const postCount = result.hits.total as number;
+      const posts = result.hits.hits.map(ht => ht._source);
+      return new Page<Post>(posts, postCount);
+    } else {
+      const postCount = await this.posts.count();
+      const posts = await this.posts
+        .find()
+        .skip((page.pageNum - 1) * page.pageSize)
+        .limit(page.pageSize);
+      return new Page<Post>(posts, postCount);
+    }
   }
 
   public async getPost(postId: string): Promise<Post> {

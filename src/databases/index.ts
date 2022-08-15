@@ -1,5 +1,11 @@
-import { DB_URL } from '@config';
+import { DB_URL, REDIS_URL, ES_NODE, INDEX_NAME } from '@config';
 
 export const dbConnection = {
-  url: DB_URL,
+  dbUrl: DB_URL,
+
+  redisUrl: REDIS_URL,
+
+  esNode: ES_NODE,
+
+  indexName: INDEX_NAME,
 };

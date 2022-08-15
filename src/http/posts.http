@@ -17,8 +17,8 @@ POST {{ baseURL }}/posts
 Content-Type: application/json
 
 {
-    "title":"测试评论的标题",
-    "content": "测试评论的内容"
+    "title":"88888",
+    "content": "孤寡孤寡"
 }
 
 ###
@@ -28,8 +28,19 @@ Content-Type: application/json
 
 {
     "postId":"62f9b6d3602cce91c3abff9e",
-    "title":"测试评论111",
-    "content": "汪汪队开大会111231312"
+    "title":"三民主义",
+    "content": "民主，"
+}
+
+###
+# PAGE post
+POST {{ baseURL }}/posts/page
+Content-Type: application/json
+
+{
+    "pageNum":5,
+    "pageSize":2,
+    "keyword":"对象"
 }
 
 ###
