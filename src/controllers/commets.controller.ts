@@ -19,7 +19,7 @@ class CommentsController {
     try {
       const postId = req.params.postId;
       const commets = await this.commetService.getComments(postId);
-      res.status(201).json({ data: commets });
+      res.status(200).json({ data: commets });
     } catch (error) {
       next(error);
     }

@@ -20,7 +20,7 @@ class PostController {
     try {
       const post: UpdatePostDto = req.body;
       const postId = await this.postService.updatePost(post);
-      res.status(201).json({ data: postId });
+      res.status(200).json({ data: postId });
     } catch (error) {
       next(error);
     }
@@ -29,7 +29,7 @@ class PostController {
   public getPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const post: Post = await this.postService.getPost(req.params.postId);
-      res.status(201).json({ data: post });
+      res.status(200).json({ data: post });
     } catch (error) {
       next(error);
     }
@@ -39,7 +39,7 @@ class PostController {
     try {
       const page: PagePostDto = req.body;
       const posts = await this.postService.pagePost(page);
-      res.status(201).json({ data: posts });
+      res.status(200).json({ data: posts });
     } catch (error) {
       next(error);
     }
