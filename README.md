@@ -1,11 +1,11 @@
 技术栈
 1. express
 2. typescript
-3. mongodb
-4. elastic search
+3. mongodb:6.0.0
+4. elastic search:7.17.5
 5. redis
-6. logdash
-elastic search版本为7.17.5 需安装ik分词器
+6. logstash:7.17.5
+elastic search版本为,需安装ik分词器
 mapping如下
 ```
 PUT posts
@@ -34,7 +34,7 @@ PUT posts
 }
 
 ```
-logdash 需安装logstash-input-mongodb差距
+logstash 需安装logstash-input-mongodb插件
 配置如下
 ```
 
